@@ -8,10 +8,11 @@ const registerShow = (req, res) => {
 const registerDo = async (req, res, next) => {
   if (req.body.password != req.body.password1) {
     req.flash("error", "The passwords entered do not match.");
-    return res.render("register", {  errors: flash("errors") });
+    return res.render("register", {  errors: req.flash("errors") });
   }
   try {
     await User.create(req.body);
+    console.log(req.body)
   } catch (e) {
     if (e.constructor.name === "ValidationError") {
       parseVErr(e, req);
@@ -20,7 +21,7 @@ const registerDo = async (req, res, next) => {
     } else {
       return next(e);
     }
-    return res.render("register", {  errors: flash("errors") });
+    return res.render("register", {  errors: req.flash("errors") });
   }
   res.redirect("/");
 };
@@ -35,13 +36,15 @@ const logoff = (req, res) => {
 };
 
 const logonShow = (req, res) => {
+  console.log(req.user);
   if (req.user) {
     return res.redirect("/");
   }
-  res.render("logon", {
-    errors: req.flash("error"),
-    info: req.flash("info"),
-  });
+  res.render("logon");
+  // res.render("logon", {
+  //   errors: req.flash("error"),
+  //   info: req.flash("info"),
+  // });
 };
 
 module.exports = {
