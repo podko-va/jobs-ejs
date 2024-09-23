@@ -5,7 +5,6 @@ router.get("/", (req, res) => {
   if (!req.session.secretWord) {
     req.session.secretWord = "syzygy";
   }
-
   res.render("secretWord", { secretWord: req.session.secretWord });
 });
 
