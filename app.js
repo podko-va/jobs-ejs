@@ -1,6 +1,10 @@
 const express = require("express");
 require("express-async-errors");
 
+const helmet = require("helmet");
+const xss = require("xss-clean");
+const rateLimiter = require("express-rate-limit");
+
 require("dotenv").config();
 
 const app = express();
@@ -61,6 +65,16 @@ if (app.get("env") === "production") {
 }
 
 app.use(session(sessionParms));
+//Extra protection
+
+app.use(
+  rateLimiter({
+    windowMs: 15 * 60 * 1000, //15 min
+    max: 100 //limit each IP to 100 requests per windowMs
+  })
+);
+app.use(helmet());
+app.use(xss());
 
 // Passport initialization
 const passport = require("passport");
@@ -83,6 +97,9 @@ const secretWordRouter = require("./routes/secretWord");
 //app.use("/secretWord", secretWordRouter);
 const auth = require("./middleware/auth");
 app.use("/secretWord", auth, secretWordRouter);
+
+const jobs = require("./routes/jobs");
+app.use("/jobs", auth, jobs);
 
 // Error handling
 app.use((req, res) => {
