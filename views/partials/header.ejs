@@ -1,9 +1,37 @@
 <h1>The Jobs EJS Application</h1>
+
+<style>
+  .logoff-form {
+    text-align: left;
+    margin-bottom: 20px;
+  }
+
+  button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #45a049;
+  }
+
+</style>
+
+
 <% if (user) { %>
-  <p>User <%= user.name %> is logged on.</p>
-  <form method="POST" action="/sessions/logoff">
-  <button>Logoff</button>
-  </form>
+  <div class="user-info">
+    <p>User <%= user.name %> is logged on.</p>
+  </div>
+  <div class="logoff-form">  
+    <form method="POST" action="/sessions/logoff">
+      <input type="hidden" name="_csrf" value="<%= _csrf %>">
+      <button>Logoff</button>
+    </form>
+ </div>
 <% } %>
 <% if (errors) {
     errors.forEach((err) => { %>

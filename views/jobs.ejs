@@ -1,0 +1,114 @@
+<%- include("partials/head.ejs") %>
+<%- include("partials/header.ejs") %>
+
+<h2 class="centered-title">Jobs List</h2>
+
+<style>
+  .centered-title {
+    text-align: center; /* Центрирует заголовок по горизонтали */
+    margin-bottom: 20px; /* Добавляет отступ снизу для разделения заголовка и таблицы */
+  }
+  .table-container {
+    width: 80%; /* Установите ширину таблицы на 80% от окна */
+    max-width: 1000px; /* Ограничение по максимальной ширине */
+    margin: 0 auto; /* Центрирование таблицы */
+  }
+
+  table {
+    width: 100%; /* Таблица занимает всю ширину контейнера */
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+
+  th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+
+  th {
+    background-color: #4CAF50;
+    color: white;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+
+  tr:hover {
+    background-color: #f5f5f5;
+  }
+
+  button {
+    padding: 8px 12px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #45a049;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  /* Добавим адаптивность для маленьких экранов */
+  @media (max-width: 600px) {
+    .table-container {
+      width: 95%;
+    }
+
+    button {
+      padding: 6px 10px;
+    }
+  }
+</style>
+
+<div class="table-container">
+  <table id="jobs-table">
+    <tr id="jobs-table-header">
+      <th>Company</th>
+      <th>Position</th>
+      <th>Status</th>
+      <th colspan="3"></th>
+    </tr>
+    <% 
+    let jobId = ""
+    if (jobs && jobs.length) { 
+       jobs.forEach((job) => { 
+          jobId = job._id.toString()
+          %>
+        <tr>
+          <td><%= job.company %></td>
+          <td><%= job.position %></td>
+          <td><%= job.status %></td>
+          <td>
+            <form method="GET" action="/jobs/<%= jobId %>">
+                <input type="hidden" name="_csrf" value="<%= _csrf %>" />
+                <button type="submit">Show this job</button>
+            </form>  
+          </td>
+          <td>
+            <form method="POST" action="/jobs/delete/<%= jobId %>" style="display: inline">
+              <input type="hidden" name="_csrf" value="<%= _csrf %>" />
+              <button type="submit" style="background-color: red;">Delete</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    <% } %>
+    <tr>
+      <td colspan="6" style="text-align: center;">
+        <a href="/jobs/new">
+          <button type="button">Create new job</button>
+        </a>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<%- include("partials/footer.ejs") %>

@@ -1,0 +1,93 @@
+<%- include("partials/head.ejs") %>
+<%- include("partials/header.ejs") %>
+
+<%console.log("job", job)%>
+
+<% let CompanyValue = ""
+let PositionValue = ""
+let StatusValue = ""
+let id = ""
+if (job !== null) {
+  id = job._id.toString()
+  CompanyValue = job.company
+  PositionValue = job.position
+  StatusValue = job.status
+}
+let formAction = ""
+if (job === null) {
+  formAction = '/jobs'
+}
+if (job) {
+  formAction = `/jobs/update/${id}`
+}
+%>
+<style>
+  .form-row {
+    display: flex;
+    align-items: center; /* Выравнивание по вертикали */
+    margin-bottom: 15px; /* Отступ между строками */
+  }
+
+  .form-row label {
+    width: 150px; /* Фиксированная ширина для выравнивания меток */
+    margin-right: 20px; /* Отступ между меткой и полем ввода */
+    font-weight: bold; /* Подчеркнуть метки для улучшения восприятия */
+  }
+
+  .form-row input {
+    flex-grow: 1; /* Поле ввода займёт оставшееся место */
+    padding: 8px; /* Внутренний отступ внутри поля ввода */
+    border: 1px solid #ccc; /* Границы поля */
+    border-radius: 4px; /* Скругленные углы */
+  }
+
+  button {
+    padding: 10px 15px; /* Отступы внутри кнопки */
+    background-color: #4CAF50; /* Зелёный фон */
+    color: white; /* Цвет текста */
+    border: none; /* Убрать границы */
+    border-radius: 4px; /* Скругленные углы */
+    cursor: pointer; /* Поменять курсор на указатель */
+  }
+
+  button:hover {
+    background-color: #45a049; /* Темнее при наведении */
+  }
+</style>
+
+<h2>Job Entry</h2>
+<div id="jobEntery"></div>
+<form action="<%= formAction %>" method="POST">
+  <input type="hidden" name="_csrf" value="<%= _csrf %>" />
+
+  <div class="form-row">
+    <label for="company">Company:</label>
+    <input type="text" id="company" name="company" value="<%= CompanyValue %>" />
+  </div>
+
+  <div class="form-row">
+    <label for="position">Position:</label>
+    <input type="text" id="position" name="position" value="<%= PositionValue %>"/>
+  </div>
+
+  <div class="form-row">
+    <label for="status">Status:</label>
+    <input type="text" id="status" name="status" value="<%= StatusValue %>" />
+  </div>
+
+  <% if (job === null) { %>
+        <button type="submit">Add</button>
+    <%}%>
+  <% if (job !== null) { %>
+        <button type="submit">Edit</button>
+   <% } %>
+
+</form>
+<% if (job !== null) { %>
+  <form method="POST" action="/jobs/delete/<%= id %>" style="display: inline">
+    <button type="submit" style="background-color: red;">Delete Job</button>
+    <input type="hidden" name="_csrf" value="<%= _csrf %>" />
+  </form>
+<% } %>
+
+<%- include("partials/footer.ejs") %>

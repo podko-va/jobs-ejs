@@ -1,9 +1,63 @@
 <%- include("partials/head.ejs") %>
 <%- include("partials/header.ejs") %>
+
+<h2 class="centered-title">Welcome to the Job Management System</h2>
+
+<style>
+  .centered-title {
+    text-align: center; /* Центрирование заголовка */
+    margin-bottom: 20px; /* Отступ под заголовком */
+  }
+
+  ul {
+    list-style-type: none; /* Убираем маркеры списка */
+    padding: 0;
+    margin: 0;
+    text-align: center; /* Центрируем список */
+  }
+
+  li {
+    margin-bottom: 10px; /* Отступ между элементами списка */
+  }
+
+  a {
+    text-decoration: none;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 5px;
+    display: inline-block;
+  }
+
+  a:hover {
+    background-color: #45a049; /* Цвет кнопки при наведении */
+  }
+
+  .auth-links {
+    display: flex;
+    justify-content: center; /* Центрирование кнопок логина и регистрации */
+    gap: 10px; /* Промежуток между кнопками */
+    margin-top: 20px; /* Отступ сверху */
+  }
+
+  /* Адаптивная версия для маленьких экранов */
+  @media (max-width: 600px) {
+    a {
+      padding: 8px 16px;
+    }
+  }
+</style>
+
 <% if (user) { %>
-    <a href="/secretWord">Click this link to view/change the secret word.</a>
+    <ul>
+        <li><a href="/secretWord">Click this link to view/change the secret word.</a></li>
+        <li><a href="/jobs">List of jobs.</a></li>
+    </ul>
 <% } else { %>
-    <a href="/sessions/logon">Click this link to logon.</a>
-    <a href="/sessions/register">Click this link to register.</a>
+    <div class="auth-links">
+      <a href="/sessions/logon">Click this link to logon</a>
+      <a href="/sessions/register">Click this link to register</a>
+    </div>
 <% } %>
+
 <%- include("partials/footer.ejs") %>
