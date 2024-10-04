@@ -40,7 +40,11 @@ app.use(csrf_middleware);
 // Session configuration
 const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
-const url = process.env.MONGO_URI;
+//const url = process.env.MONGO_URI;
+let url = process.env.MONGO_URI;
+if (process.env.NODE_ENV == "test") {
+  url = process.env.MONGO_URI_TEST;
+}
 
 const store = new MongoDBStore({
   // may throw an error, which won't be caught
@@ -76,6 +80,15 @@ app.use(
 app.use(helmet());
 app.use(xss());
 
+app.use((req, res, next) => {
+  if (req.path == "/multiply") {
+    res.set("Content-Type", "application/json");
+  } else {
+    res.set("Content-Type", "text/html");
+  }
+  next();
+});
+
 // Passport initialization
 const passport = require("passport");
 const passportInit = require("./passport/passportInit");
@@ -101,6 +114,16 @@ app.use("/secretWord", auth, secretWordRouter);
 const jobs = require("./routes/jobs");
 app.use("/jobs", auth, jobs);
 
+app.get("/multiply", (req, res) => {
+  const result = req.query.first * req.query.second;
+  if (result.isNaN) {
+    result = "NaN";
+  } else if (result == null) {
+    result = "null";
+  }
+  res.json({ result: result });
+});
+
 // Error handling
 app.use((req, res) => {
   res.status(404).send(`That page (${req.url}) was not found.`);
@@ -113,9 +136,10 @@ app.use((err, req, res, next) => {
 
 const port = process.env.PORT || 3000;
 
-const start = async () => {
+const start = () => { //async () => {
   try {
-    await require("./db/connect")(process.env.MONGO_URI);
+    //await 
+    require("./db/connect")(process.env.MONGO_URI);
     app.listen(port, () =>
       console.log(`Server is listening on port ${port}...`)
     );
@@ -125,3 +149,5 @@ const start = async () => {
 };
 
 start();
+
+module.exports = { app };
