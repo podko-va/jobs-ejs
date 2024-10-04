@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js"
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "test": "mocha tests/*.js --timeout 5000 --exit"
   },
   "author": "",
   "license": "ISC",
@@ -29,8 +30,14 @@
     "xss-clean": "^0.1.4"
   },
   "devDependencies": {
+    "@faker-js/faker": "^9.0.3",
+    "chai": "^5.1.1",
+    "chai-http": "^5.0.0",
     "eslint": "^9.10.0",
-    "nodemon": "^2.0.22",
-    "prettier": "^3.3.3"
+    "factory-bot": "^6.3.1",
+    "mocha": "^10.7.3",
+    "nodemon": "^3.1.7",
+    "prettier": "^3.3.3",
+    "puppeteer": "^23.5.0"
   }
 }
